@@ -1,0 +1,14 @@
+services:
+  aorora:
+    build: .
+    container_name: aorora
+    restart: unless-stopped
+    env_file: .env
+    # run as the owner of ./data so the store can save photos and the database
+    user: "${UID:-1000}:${GID:-1000}"
+    ports:
+      # BIND=127.0.0.1 keeps it private to the machine; 0.0.0.0 opens it to your network.
+      # Extra addresses can go in docker-compose.override.yml (not in git).
+      - "${BIND:-0.0.0.0}:${PORT:-8090}:8000"
+    volumes:
+      - ./data:/data

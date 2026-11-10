@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ t.import_products }} · AORORA{% endblock %}
+{% block body_class %}is-admin{% endblock %}
+{% block content %}
+<section class="container admin narrow-wide">
+  {% include "_admin_nav.html" %}
+  <h1>{{ t.import_products }}</h1>
+
+  {% if result %}
+    <div class="flash flash-ok">✓ {{ t.import_done|replace('{n}', result.added|string) }}</div>
+    {% for e in result.errors %}<div class="flash flash-error">{{ e }}</div>{% endfor %}
+    {% if result.unused %}
+      <div class="flash flash-error">{{ t.import_unused }}: {{ result.unused|join(', ') }}</div>
+    {% endif %}
+    <p><a href="{{ url_for('admin') }}" class="btn btn-primary">{{ t.products }}</a></p>
+  {% endif %}
+
+  <ol class="steps">
+    <li>
+      <strong>{{ t.import_step1 }}</strong>
+      <span class="muted small">{{ t.import_step1_d }}</span>
+      <a href="{{ url_for('admin_import_template') }}" class="btn btn-light small">⬇ {{ t.import_template }}</a>
+    </li>
+    <li>
+      <strong>{{ t.import_step2 }}</strong>
+      <span class="muted small">{{ t.import_step2_d }}</span>
+    </li>
+    <li>
+      <strong>{{ t.import_step3 }}</strong>
+      <span class="muted small">{{ t.import_step3_d }}</span>
+    </li>
+  </ol>
+
+  <form method="post" enctype="multipart/form-data" class="form panel" data-import-form>
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label>{{ t.import_sheet }} *
+      <input type="file" name="sheet" accept=".xlsx,.csv" required>
+    </label>
+    <label>{{ t.import_photos }}
+      <input type="file" name="photos" accept="image/*" multiple>
+      <span class="muted small">{{ t.import_photos_d }}</span>
+    </label>
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit" data-import-btn>{{ t.import_btn }}</button>
+    </div>
+  </form>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+  document.querySelector("[data-import-form]").addEventListener("submit", function () {
+    var b = document.querySelector("[data-import-btn]");
+    b.disabled = true; b.textContent = {{ t.import_wait|tojson }};
+  });
+</script>
+{% endblock %}

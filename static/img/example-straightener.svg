@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff5f9"/><stop offset="1" stop-color="#fde1ec"/></linearGradient>
+    <linearGradient id="arm" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f06a9d"/><stop offset="1" stop-color="#d9447d"/></linearGradient>
+    <linearGradient id="plate" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f7f2f4"/><stop offset="1" stop-color="#d9cfd4"/></linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <circle cx="300" cy="300" r="210" fill="#ffffff" opacity=".7"/>
+  <g transform="rotate(-28 300 300)">
+    <rect x="262" y="80" width="40" height="300" rx="20" fill="url(#arm)"/>
+    <rect x="308" y="80" width="40" height="300" rx="20" fill="url(#arm)" opacity=".92"/>
+    <rect x="268" y="96" width="28" height="150" rx="10" fill="url(#plate)"/>
+    <rect x="314" y="96" width="28" height="150" rx="10" fill="url(#plate)"/>
+    <rect x="270" y="360" width="70" height="170" rx="30" fill="#2b1d24"/>
+    <rect x="290" y="390" width="30" height="10" rx="5" fill="#e8518a"/>
+    <circle cx="305" cy="425" r="9" fill="#ffd3e3"/>
+    <path d="M305 530 q0 40 -40 60" stroke="#2b1d24" stroke-width="10" fill="none" stroke-linecap="round"/>
+  </g>
+  <g fill="#e8518a" opacity=".5"><circle cx="120" cy="140" r="6"/><circle cx="480" cy="460" r="8"/><circle cx="470" cy="120" r="4"/></g>
+</svg>

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ t.admin_login }} · AORORA{% endblock %}
+{% block content %}
+<section class="container narrow">
+  <div class="panel">
+    <h1>{{ t.admin_login }}</h1>
+    <form method="post" class="form">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label>{{ t.password }}<input type="password" name="password" autocomplete="current-password" required autofocus></label>
+      <button class="btn btn-primary" type="submit">{{ t.login }}</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

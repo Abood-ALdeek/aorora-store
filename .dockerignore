@@ -1,0 +1,9 @@
+data
+.env
+.git
+__pycache__
+*.pyc
+data-local
+.env.local
+run_local.py
+.claude

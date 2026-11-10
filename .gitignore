@@ -1,0 +1,26 @@
+# secrets
+.env
+.env.local
+.env.*.local
+
+# store data: database, backups and uploaded photos
+data/
+data-local/
+*.db
+*.db-journal
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# editor / tools
+.claude/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# server-specific Docker settings
+docker-compose.override.yml

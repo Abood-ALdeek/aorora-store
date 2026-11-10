@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{{ t.settings }} · AORORA{% endblock %}
+{% block body_class %}is-admin{% endblock %}
+{% block content %}
+<section class="container admin narrow-wide">
+  {% include "_admin_nav.html" %}
+  <h1>{{ t.settings }}</h1>
+  <form method="post" enctype="multipart/form-data" class="form panel">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label>{{ t.whatsapp_number }}
+      <input name="whatsapp" value="+{{ settings.whatsapp }}" inputmode="tel" dir="ltr" required>
+    </label>
+    <fieldset class="promo-set">
+      <legend>{{ t.hero_setting }}</legend>
+      <label>{{ t.promo_text_en }}<input name="hero_en" value="{{ settings.hero_en }}" maxlength="120" dir="ltr"></label>
+      <label>{{ t.promo_text_ar }}<input name="hero_ar" value="{{ settings.hero_ar }}" maxlength="120" dir="rtl"></label>
+    </fieldset>
+    <label>{{ t.site_url }}
+      <input name="site_url" value="{{ settings.site_url }}" dir="ltr" placeholder="https://aorora.adham.no">
+      <span class="muted small">{{ t.site_url_hint }}</span>
+    </label>
+    <fieldset class="promo-set">
+      <legend>{{ t.promo_bar }}</legend>
+      <label class="check"><input type="checkbox" name="promo_on" {% if settings.promo_on == '1' %}checked{% endif %}> {{ t.promo_show }}</label>
+      <label>{{ t.promo_text_en }}<input name="promo_en" value="{{ settings.promo_en }}" maxlength="200" dir="ltr"></label>
+      <label>{{ t.promo_text_ar }}<input name="promo_ar" value="{{ settings.promo_ar }}" maxlength="200" dir="rtl"></label>
+      <span class="muted small">{{ t.promo_hint }}</span>
+    </fieldset>
+    <label>{{ t.instagram_link }}
+      <input name="instagram" value="{{ settings.instagram }}" dir="ltr" type="url">
+    </label>
+
+    <div class="photo-field">
+      <div class="photo-preview logo-preview" data-preview>
+        <img src="{{ settings.logo or url_for('static', filename='img/logo.png') }}" alt="">
+      </div>
+      <label>{{ t.logo }}
+        <input type="file" name="logo" accept="image/*" data-preview-input>
+      </label>
+    </div>
+    {% if settings.logo %}
+      <label class="check"><input type="checkbox" name="remove_logo"> {{ t.remove_logo }}</label>
+    {% endif %}
+
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">{{ t.save }}</button>
+    </div>
+  </form>
+</section>
+{% endblock %}

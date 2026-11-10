@@ -1,0 +1,11 @@
+<div class="admin-nav">
+  <a href="{{ url_for('admin') }}" class="{% if request.endpoint == 'admin' %}active{% endif %}">{{ t.products }}</a>
+  <a href="{{ url_for('admin_import') }}" class="{% if request.endpoint == 'admin_import' %}active{% endif %}">{{ t.import_products }}</a>
+  <a href="{{ url_for('admin_complaints') }}" class="{% if request.endpoint == 'admin_complaints' %}active{% endif %}">{{ t.complaints_admin }}{% if new_complaints %} <span class="nav-badge">{{ new_complaints }}</span>{% endif %}</a>
+  <a href="{{ url_for('admin_settings') }}" class="{% if request.endpoint == 'admin_settings' %}active{% endif %}">{{ t.settings }}</a>
+  <a href="{{ url_for('home') }}" target="_blank">{{ t.view_store }} ↗</a>
+  <form method="post" action="{{ url_for('admin_logout') }}" class="inline push">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <button class="link-btn" type="submit">{{ t.logout }}</button>
+  </form>
+</div>

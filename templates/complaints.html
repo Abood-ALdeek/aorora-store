@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}{{ t.complaints }} · AORORA{% endblock %}
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <a href="{{ url_for('home') }}#shop" class="back-shop">
+      <svg viewBox="0 0 24 24" aria-hidden="true" class="flip-rtl"><path d="M15.7 5.3a1 1 0 0 1 0 1.4L10.4 12l5.3 5.3a1 1 0 0 1-1.4 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.4 0Z"/></svg>
+      {{ t.back_to_shop }}
+    </a>
+    <span class="eyebrow"><span class="brand-word">AORORA</span></span>
+    <h1>{{ t.complaints }}</h1>
+    <p class="muted">{{ t.c_intro }}</p>
+  </div>
+</section>
+
+<section class="container complaints-page">
+  {% if done %}
+    <div class="panel thank-you">
+      <div class="ty-icon">✓</div>
+      <h2>{{ t.c_thanks }}</h2>
+      <p>{{ t.c_thanks_sub }}</p>
+      <p class="ty-ref">{{ t.c_ref }} <strong dir="ltr">#{{ done }}</strong></p>
+      <a href="{{ url_for('home') }}#shop" class="btn btn-primary">{{ t.back_to_shop }}</a>
+    </div>
+  {% else %}
+  <div class="complaints-layout">
+    <form method="post" class="form panel" novalidate>
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="kind-picker" role="radiogroup" aria-label="{{ t.c_kind }}">
+        {% for k in ['complaint', 'suggestion', 'question'] %}
+          <label class="kind">
+            <input type="radio" name="kind" value="{{ k }}" {% if (form.kind or 'complaint') == k %}checked{% endif %}>
+            <span>{{ t['c_kind_' ~ k] }}</span>
+          </label>
+        {% endfor %}
+      </div>
+
+      <div class="two">
+        <label>{{ t.full_name }} *<input name="name" value="{{ form.name or '' }}" autocomplete="name" required maxlength="100"></label>
+        <label>{{ t.phone }} *<input name="phone" type="tel" value="{{ form.phone or '' }}" autocomplete="tel" required maxlength="40" dir="ltr"></label>
+      </div>
+      <label>{{ t.c_order }}<input name="order_ref" value="{{ form.order_ref or '' }}" maxlength="60"></label>
+      <label>{{ t.c_message }} *<textarea name="message" rows="6" required maxlength="3000">{{ form.message or '' }}</textarea></label>
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit">{{ t.c_send }}</button>
+        <a href="{{ url_for('home') }}#shop" class="btn btn-light">{{ t.back_to_shop }}</a>
+      </div>
+      <p class="muted small">{{ t.c_privacy }}</p>
+    </form>
+
+    <aside class="help-side">
+      <div class="help-card">
+        <span class="f-icon">⏱</span>
+        <div><strong>{{ t.c_side1_t }}</strong><span>{{ t.c_side1_d }}</span></div>
+      </div>
+      <div class="help-card">
+        <span class="f-icon">🛡️</span>
+        <div><strong>{{ t.perk_guarantee }}</strong><span>{{ t.c_side2_d }}</span></div>
+      </div>
+      <a class="help-card wa" href="https://wa.me/{{ settings.whatsapp }}" target="_blank" rel="noopener">
+        <span class="f-icon">💬</span>
+        <div><strong>{{ t.c_side3_t }}</strong><span>{{ t.c_side3_d }}</span></div>
+      </a>
+    </aside>
+  </div>
+  {% endif %}
+</section>
+{% endblock %}

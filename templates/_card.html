@@ -1,0 +1,26 @@
+<article class="card {% if not p.in_stock %}is-out{% endif %}">
+  <a href="{{ url_for('product', pid=p.id) }}" class="card-img">
+    {% if p.image %}<img src="{{ p.image }}" alt="{{ p.name }}" loading="lazy">{% endif %}
+    {% if not p.in_stock %}<span class="badge badge-out">{{ t.out_of_stock }}</span>
+    {% elif p.on_sale %}<span class="badge badge-sale">-{{ p.discount }}%</span>{% endif %}
+  </a>
+  <div class="card-body">
+    {% if p.brand %}
+      <span class="card-cat card-brand">{{ p.brand }}</span>
+    {% else %}
+      <span class="card-cat">{{ t['cat_' ~ p.category] }}</span>
+    {% endif %}
+    <h3><a href="{{ url_for('product', pid=p.id) }}">{{ p.name }}</a></h3>
+    <div class="card-foot">
+      <span class="price-wrap">
+        <span class="price {% if p.on_sale %}sale{% endif %}">{{ fmt_price(p.price) }}</span>
+        {% if p.on_sale %}<s class="old-price">{{ fmt_price(p.old_price) }}</s>{% endif %}
+      </span>
+      {% if p.in_stock %}
+        <button class="btn-icon" data-add="{{ p.id }}" aria-label="{{ t.add_to_cart }}" title="{{ t.add_to_cart }}">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a1 1 0 0 1 1 1v5h5a1 1 0 1 1 0 2h-5v5a1 1 0 1 1-2 0v-5H6a1 1 0 1 1 0-2h5V6a1 1 0 0 1 1-1Z"/></svg>
+        </button>
+      {% endif %}
+    </div>
+  </div>
+</article>

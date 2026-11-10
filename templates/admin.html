@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}{{ t.admin }} · AORORA{% endblock %}
+{% block body_class %}is-admin{% endblock %}
+{% block content %}
+<section class="container admin">
+  {% include "_admin_nav.html" %}
+  <div class="admin-head">
+    <h1>{{ t.products }} <span class="muted">({{ products|length }})</span></h1>
+    <div class="form-actions" style="margin:0">
+      <a href="{{ url_for('admin_import') }}" class="btn btn-light">{{ t.import_products }}</a>
+      <a href="{{ url_for('admin_edit') }}" class="btn btn-primary">+ {{ t.add_product }}</a>
+    </div>
+  </div>
+
+  {% if not products %}<p class="empty">{{ t.no_products }}</p>{% endif %}
+
+  <div class="admin-list">
+    {% for p in products %}
+    <div class="admin-row">
+      <div class="thumb">{% if p.image %}<img src="{{ p.image }}" alt="">{% endif %}</div>
+      <div class="info">
+        <strong>{{ p.name }}</strong>
+        <span class="muted small">{% if p.brand %}{{ p.brand }} · {% endif %}{{ t['cat_' ~ p.category] }} · {{ fmt_price(p.price) }}</span>
+        <form method="post" action="{{ url_for('admin_toggle_stock', pid=p.id) }}" class="inline">
+          <input type="hidden" name="csrf" value="{{ csrf }}">
+          <button class="stock-pill {% if p.in_stock %}ok{% else %}no{% endif %}" title="{{ t.toggle_stock }}">
+            {% if p.in_stock %}{{ t.in_stock }}{% else %}{{ t.out_of_stock }}{% endif %}
+          </button>
+        </form>
+      </div>
+      <div class="actions">
+        <a href="{{ url_for('admin_edit', pid=p.id) }}" class="btn btn-light small">{{ t.edit }}</a>
+        <form method="post" action="{{ url_for('admin_delete', pid=p.id) }}" class="inline"
+              onsubmit="return confirm({{ t.confirm_delete|tojson|forceescape }})">
+          <input type="hidden" name="csrf" value="{{ csrf }}">
+          <button class="btn btn-danger small" type="submit">{{ t.delete }}</button>
+        </form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

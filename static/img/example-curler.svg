@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff5f9"/><stop offset="1" stop-color="#fde1ec"/></linearGradient>
+    <linearGradient id="barrel" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9e1e5"/><stop offset=".5" stop-color="#ffffff"/><stop offset="1" stop-color="#d6cbd1"/></linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <circle cx="300" cy="300" r="210" fill="#ffffff" opacity=".7"/>
+  <g transform="rotate(24 300 300)">
+    <rect x="280" y="70" width="40" height="40" rx="20" fill="#2b1d24"/>
+    <rect x="270" y="100" width="60" height="250" rx="30" fill="url(#barrel)"/>
+    <rect x="322" y="120" width="22" height="200" rx="11" fill="#e8518a"/>
+    <rect x="262" y="340" width="76" height="190" rx="34" fill="#e8518a"/>
+    <rect x="285" y="380" width="30" height="10" rx="5" fill="#ffffff"/>
+    <circle cx="300" cy="420" r="9" fill="#2b1d24"/>
+  </g>
+  <path d="M120 420 c40 -40 60 40 100 0 s60 40 100 0" stroke="#e8518a" stroke-width="8" fill="none" stroke-linecap="round" opacity=".45"/>
+  <g fill="#e8518a" opacity=".5"><circle cx="120" cy="140" r="6"/><circle cx="470" cy="120" r="4"/></g>
+</svg>
