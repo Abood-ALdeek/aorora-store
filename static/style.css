@@ -557,3 +557,6 @@ html[dir="rtl"] .back-shop { padding: 9px 12px 9px 18px; }
 .back-shop:hover { background: var(--hot); color: #fff; border-color: var(--hot); }
 .page-hero .container { display: flex; flex-direction: column; align-items: center; }
 .page-hero .back-shop { align-self: flex-start; }
+
+/* v17: qty number was clipped by input padding */
+.qty input { padding: 0; min-width: 36px; }
