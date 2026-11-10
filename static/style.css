@@ -560,3 +560,9 @@ html[dir="rtl"] .back-shop { padding: 9px 12px 9px 18px; }
 
 /* v17: qty number was clipped by input padding */
 .qty input { padding: 0; min-width: 36px; }
+
+/* v18: order summary page */
+.order-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 16px; max-width: 720px; }
+.order-page .cart-item:hover { border-color: var(--pink); }
+.order-qty { color: var(--hot); font-size: 1.1rem; }
+.order-total { max-width: 720px; margin-bottom: 20px; border-bottom: 0; }

@@ -1,4 +1,5 @@
 import os
+import re
 import secrets
 import sqlite3
 import time
@@ -274,6 +275,97 @@ def product(pid):
 @app.route("/cart")
 def cart():
     return render_template("cart.html")
+
+
+# ---------- order summary page + one combined photo for WhatsApp previews ----------
+ORDER_CODE = re.compile(r"^\d{1,7}x\d{1,2}(-\d{1,7}x\d{1,2}){0,19}$")
+
+
+def order_items(code):
+    """'8x2-9x1' -> [(product, qty), ...] for products that exist"""
+    if not ORDER_CODE.match(code or ""):
+        return None
+    lang = current_lang()
+    items = []
+    for part in code.split("-"):
+        pid, qty = (int(x) for x in part.split("x"))
+        row = db().execute("SELECT * FROM products WHERE id = ?", (pid,)).fetchone()
+        if row and 1 <= qty <= 20:
+            items.append((product_view(row, lang), qty))
+    return items
+
+
+@app.route("/order/<code>")
+def order_page(code):
+    items = order_items(code)
+    if not items:
+        abort(404)
+    total = sum(p["price"] * q for p, q in items)
+    return render_template("order.html", items=items, total=total, code=code)
+
+
+def _product_photo(p):
+    """open a product's photo as a PIL image, or None (e.g. SVG examples)"""
+    img = p.get("image") or ""
+    path = None
+    if img.startswith("/uploads/"):
+        path = os.path.join(UPLOAD_DIR, os.path.basename(img))
+    elif img.startswith("/static/"):
+        path = os.path.join(app.static_folder, img[len("/static/"):])
+    if not path or not os.path.exists(path) or path.endswith(".svg"):
+        return None
+    try:
+        return ImageOps.exif_transpose(Image.open(path)).convert("RGB")
+    except Exception:
+        return None
+
+
+@app.route("/order/<code>.jpg")
+def order_image(code):
+    items = order_items(code)
+    if not items:
+        abort(404)
+    cache_dir = os.path.join(DATA_DIR, "cache")
+    os.makedirs(cache_dir, exist_ok=True)
+    stamp = max(int(p.get("created_at") or 0) for p, _ in items)
+    path = os.path.join(cache_dir, f"order-{code}-{stamp}.jpg")
+    if not os.path.exists(path):
+        from PIL import ImageDraw, ImageFont
+        W, H = 1200, 630  # standard link-preview size
+        canvas = Image.new("RGB", (W, H), (255, 240, 246))
+        d = ImageDraw.Draw(canvas)
+        shown = items[:6]
+        n = len(shown)
+        cols = n if n <= 3 else 3
+        rows = 1 if n <= 3 else 2
+        pad = 24
+        tile = min((W - pad * (cols + 1)) // cols, (H - pad * (rows + 1)) // rows)
+        x0 = (W - (cols * tile + (cols - 1) * pad)) // 2
+        y0 = (H - (rows * tile + (rows - 1) * pad)) // 2
+        try:
+            fnt = ImageFont.truetype("DejaVuSans-Bold.ttf", max(28, tile // 7))
+        except Exception:
+            fnt = ImageFont.load_default(size=max(28, tile // 7))
+        for k, (p, q) in enumerate(shown):
+            x = x0 + (k % cols) * (tile + pad)
+            y = y0 + (k // cols) * (tile + pad)
+            d.rounded_rectangle((x - 4, y - 4, x + tile + 4, y + tile + 4), 26, fill=(255, 255, 255))
+            photo = _product_photo(p)
+            if photo:
+                photo = ImageOps.fit(photo, (tile, tile))
+                mask = Image.new("L", (tile, tile), 0)
+                ImageDraw.Draw(mask).rounded_rectangle((0, 0, tile - 1, tile - 1), 22, fill=255)
+                canvas.paste(photo, (x, y), mask)
+            else:
+                d.text((x + tile // 2, y + tile // 2), (p["name_en"] or "?")[:14], fill=(201, 58, 114), anchor="mm", font=fnt)
+            if q > 1:
+                bw = max(70, tile // 3)
+                d.rounded_rectangle((x + tile - bw - 10, y + 10, x + tile - 10, y + 10 + bw // 2 + 10), 30, fill=(255, 31, 142))
+                d.text((x + tile - 10 - bw // 2, y + 10 + (bw // 2 + 10) // 2), f"x{q}", fill="white", anchor="mm", font=fnt)
+        if len(items) > 6:
+            d.text((W - 30, H - 24), f"+{len(items) - 6}", fill=(201, 58, 114), anchor="rd", font=fnt)
+        canvas.save(path, "JPEG", quality=85)
+    return send_from_directory(cache_dir, os.path.basename(path), max_age=60 * 60 * 24)
 
 
 @app.route("/api/products")

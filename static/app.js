@@ -159,7 +159,7 @@
       var err = form.querySelector("[data-form-error]");
       if (err) err.hidden = true;  // all details are optional
 
-      var cart = load(), lines = [t.wa_greeting, ""], total = 0, n = 1;
+      var cart = load(), lines = [t.wa_greeting, ""], total = 0, n = 1, code = [];
       Object.keys(cart).forEach(function (id) {
         var p = products[id];
         if (!p || !p.in_stock) return;
@@ -167,8 +167,7 @@
         total += p.price * q;
         var label = p.name + (A.lang === "ar" && p.name_alt ? " (" + p.name_alt + ")" : "");
         lines.push(n++ + ". " + label + " × " + q + " = " + fmt(p.price * q));
-        // link to the product page: WhatsApp shows its photo as a preview
-        lines.push("   " + t.wa_photo + ": " + String(A.siteUrl || location.origin).replace(/\/$/, "") + "/product/" + id);
+        code.push(id + "x" + q);
       });
       if (n === 1) { draw(); return; }
       lines.push("", "*" + t.wa_total + ": " + fmt(total) + "*");
@@ -177,6 +176,8 @@
       if (d.phone) lines.push(t.wa_phone + ": " + d.phone);
       if (d.address) lines.push(t.wa_address + ": " + d.address);
       if (d.note) lines.push(t.wa_note + ": " + d.note);
+      // one link to an order page: WhatsApp shows a single picture with ALL ordered products
+      lines.push("", t.wa_photo + ": " + String(A.siteUrl || location.origin).replace(/\/$/, "") + "/order/" + code.join("-"));
 
       var url = "https://wa.me/" + String(A.whatsapp).replace(/\D/g, "") + "?text=" + encodeURIComponent(lines.join("\n"));
       window.location.href = url;
