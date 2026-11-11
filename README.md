@@ -19,6 +19,7 @@
 </p>
 
 <p align="center">
+  <a href="https://aorora.adham-tech.com"><img alt="Live store" src="https://img.shields.io/badge/Live%20store-aorora.adham--tech.com-ff1f8e?logo=googlechrome&logoColor=white"></a>
   <a href="https://www.linkedin.com/feed/update/urn:li:activity:7526360638688911360/">
     <img alt="Watch the project video on LinkedIn" src="https://img.shields.io/badge/Watch%20the%20video-LinkedIn-0A66C2?logo=linkedin&logoColor=white">
   </a>
@@ -78,6 +79,8 @@ cd aorora-store
 cp .env.example .env      # then set ADMIN_PASSWORD and SECRET_KEY
 docker compose up -d --build
 ```
+
+Live version: **https://aorora.adham-tech.com**
 
 Open `http://localhost:8090` for the store and `http://localhost:8090/admin` for the admin panel.
 
