@@ -68,6 +68,9 @@
         qty = Math.max(1, Math.min(20, parseInt(inp && inp.value, 10) || 1));
       }
       add(addBtn.getAttribute("data-add"), qty);
+      if (addBtn.hasAttribute("data-go-cart")) {  // optional: jump straight to the cart
+        setTimeout(function () { window.location.href = "/cart"; }, 350);
+      }
       return;
     }
     var step = e.target.closest("[data-qty] [data-step]");
