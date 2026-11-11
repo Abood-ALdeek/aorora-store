@@ -18,6 +18,12 @@
   <img alt="RTL" src="https://img.shields.io/badge/Arabic-RTL-ff1f8e">
 </p>
 
+<p align="center">
+  <a href="https://www.linkedin.com/feed/update/urn:li:activity:7526360638688911360/">
+    <img alt="Watch the project video on LinkedIn" src="https://img.shields.io/badge/Watch%20the%20video-LinkedIn-0A66C2?logo=linkedin&logoColor=white">
+  </a>
+</p>
+
 ---
 
 ## Screenshots
