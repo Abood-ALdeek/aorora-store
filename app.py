@@ -394,6 +394,23 @@ def admin_required(f):
     return wrapper
 
 
+def client_ip():
+    """The visitor's real address. Behind Cloudflare every request reaches us from the
+    same tunnel address, so read the header Cloudflare adds instead."""
+    for h in ("CF-Connecting-IP", "True-Client-IP", "X-Real-IP"):
+        v = request.headers.get(h, "").strip()
+        if v:
+            return v
+    fwd = request.headers.get("X-Forwarded-For", "")
+    return fwd.split(",")[0].strip() if fwd else (request.remote_addr or "")
+
+
+@app.route("/healthz")
+def healthz():
+    db().execute("SELECT 1")
+    return "ok", 200, {"Cache-Control": "no-store"}
+
+
 def check_csrf():
     if request.form.get("csrf") != session.get("csrf"):
         abort(400)
@@ -430,7 +447,7 @@ def delete_upload(url):
 def admin_login():
     if request.method == "POST":
         check_csrf()
-        ip = request.headers.get("X-Forwarded-For", request.remote_addr or "").split(",")[0]
+        ip = client_ip()
         fails = [t for t in _failed_logins.get(ip, []) if time.time() - t < 900]
         if len(fails) >= 8:
             flash(T[current_lang()]["too_many_attempts"], "error")
@@ -726,7 +743,7 @@ def complaints():
         f = request.form
         if f.get("website"):  # hidden honeypot field: only bots fill it
             return redirect(url_for("complaints"))
-        ip = request.headers.get("X-Forwarded-For", request.remote_addr or "").split(",")[0]
+        ip = client_ip()
         recent = [x for x in _complaint_posts.get(ip, []) if time.time() - x < 3600]
         if len(recent) >= 5:
             flash(t["too_many_attempts"], "error")
