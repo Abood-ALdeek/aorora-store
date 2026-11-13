@@ -566,3 +566,94 @@ html[dir="rtl"] .back-shop { padding: 9px 12px 9px 18px; }
 .order-page .cart-item:hover { border-color: var(--pink); }
 .order-qty { color: var(--hot); font-size: 1.1rem; }
 .order-total { max-width: 720px; margin-bottom: 20px; border-bottom: 0; }
+
+
+/* ================= v20: black & pink luxury theme ================= */
+:root {
+  --pink: #ff2d8a;
+  --pink-dark: #e0136f;
+  --pink-soft: #ffe3ee;
+  --pink-softer: #fff6fa;
+  --hot: #ff2d8a;
+  --ink: #141016;
+  --muted: #7d6b76;
+  --line: #f1e1e9;
+  --noir: #141016;
+  --noir-2: #1f1822;
+  --noir-line: #2e2533;
+}
+
+/* header: black glass */
+.site-header { background: rgba(20, 16, 22, .97); border-bottom: 1px solid var(--noir-line); }
+.brand-logo { box-shadow: 0 0 0 2px rgba(255, 45, 138, .45), 0 4px 18px rgba(255, 45, 138, .35); }
+.nav-link { color: #f4ecf1; }
+.nav-link svg { color: var(--pink); }
+.nav-link:hover, .nav-link.active { color: #ff7ab6; background: rgba(255, 45, 138, .12); border-color: rgba(255, 45, 138, .45); }
+.lang-btn { background: transparent; color: #f4ecf1; border-color: var(--noir-line); }
+.lang-btn:hover { color: #ff7ab6; border-color: var(--pink); }
+.cart-btn { background: var(--pink); box-shadow: 0 6px 18px rgba(255, 45, 138, .45); }
+.cart-btn:hover { background: var(--pink-dark); }
+.cart-count { background: #fff; color: var(--noir); border-color: var(--noir); }
+@media (max-width: 560px) { .nav-link { border-color: var(--noir-line); } }
+
+/* announcement bar: black with pink sparkle */
+.promo-bar { background: linear-gradient(90deg, #ff2d8a, #ff5fa8 50%, #ff2d8a); }
+
+/* hero: white with a soft pink glow, black headline */
+.hero { background: radial-gradient(circle at 80% 15%, rgba(255, 45, 138, .16), transparent 45%),
+                    radial-gradient(circle at 10% 90%, rgba(20, 16, 22, .06), transparent 40%), #fff; }
+.hero h1 { color: var(--noir); }
+.eyebrow { background: var(--noir); border-color: var(--noir); }
+
+/* buttons: solid hot pink */
+.btn-primary { background: var(--pink); color: #fff; box-shadow: 0 10px 24px rgba(255, 45, 138, .35); }
+.btn-primary:hover { background: var(--pink-dark); }
+.btn-ghost { background: var(--noir); color: #fff; border-color: var(--noir); }
+.btn-ghost:hover { background: #2a2230; }
+.btn-light { background: var(--pink-soft); color: var(--pink-dark); }
+.btn-icon { background: var(--noir); color: #fff; }
+.btn-icon:hover { background: var(--pink); }
+.btn.is-loading { opacity: .7; cursor: progress; }
+
+/* chips */
+.chip.active, .kind input:checked + span { background: var(--noir); border-color: var(--noir); color: #fff; }
+.chip-offer.active { background: var(--pink); border-color: var(--pink); }
+
+/* product cards */
+.card { border-color: #f0e6eb; }
+.card:hover { box-shadow: 0 16px 34px rgba(20, 16, 22, .12); border-color: #ffc2dc; }
+.card-img { background: #faf6f8; }
+.badge-out { background: var(--noir); }
+.badge-sale { background: var(--pink); }
+.price.sale, .price.big, .total-row strong { color: var(--pink); }
+.card-cat { color: var(--pink); }
+.card-brand { color: var(--noir); }
+
+/* features + deals */
+.f-icon { background: var(--noir); color: var(--pink); }
+.feature { border-color: #f0e6eb; }
+.deals-box { background: radial-gradient(circle at 0% 0%, rgba(255, 45, 138, .22), transparent 45%), var(--noir); border-color: var(--noir); }
+.deals-head h2 { color: #fff; }
+.deals-head p { color: #c9b6c1; }
+.deals-tag { background: rgba(255, 45, 138, .15); border-color: rgba(255, 45, 138, .5); color: #ff7ab6; }
+.deals .btn-light { background: rgba(255, 255, 255, .1); color: #fff; }
+
+/* checkout box */
+.checkout { background: #fff; border: 2px solid var(--noir); box-shadow: 0 16px 36px rgba(20, 16, 22, .12); }
+
+/* footer: black */
+.site-footer { background: var(--noir); border-top: 0; color: #d9cbd3; }
+.site-footer .muted, .footer-brand p { color: #a8939f; }
+.footer-col h4 { color: #fff; }
+.footer-col a { color: #cbb8c3; }
+.footer-col a:hover { color: #ff7ab6; }
+.footer-badges span { color: #e9dde4; }
+.insta-link { background: var(--noir-2); border-color: var(--noir-line); color: #f4ecf1; }
+.insta-link:hover { border-color: var(--pink); color: #ff7ab6; }
+.copy { border-top-color: var(--noir-line); color: #8f7b87; }
+.footer-logo { box-shadow: 0 0 0 2px rgba(255, 45, 138, .45), 0 6px 22px rgba(255, 45, 138, .35); }
+
+/* page hero (complaints) */
+.page-hero { background: linear-gradient(180deg, #fff6fa, #fff); }
+.back-shop { border-color: var(--noir); color: var(--noir); }
+.back-shop:hover { background: var(--noir); color: #fff; border-color: var(--noir); }

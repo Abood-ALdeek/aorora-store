@@ -5,6 +5,9 @@
   <meta property="og:title" content="{{ t.order_title }} · AORORA ({{ items|length }})">
   <meta property="og:description" content="{{ t.subtotal }}: {{ fmt_price(total) }}">
   <meta property="og:image" content="{{ site_base }}{{ url_for('order_image', code=code) }}">
+  <meta property="og:image:secure_url" content="{{ site_base }}{{ url_for('order_image', code=code) }}">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:alt" content="AORORA order">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="{{ site_base }}{{ url_for('order_page', code=code) }}">

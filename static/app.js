@@ -162,28 +162,53 @@
       var err = form.querySelector("[data-form-error]");
       if (err) err.hidden = true;  // all details are optional
 
-      var cart = load(), lines = [t.wa_greeting, ""], total = 0, n = 1, code = [];
+      // ---- a neat, easy-to-read order message (WhatsApp *bold* formatting) ----
+      var SEP = "━━━━━━━━━━━━━━";
+      var NUM = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣",
+                 "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
+      var cart = load(), items = [], total = 0, count = 0, code = [];
       Object.keys(cart).forEach(function (id) {
         var p = products[id];
         if (!p || !p.in_stock) return;
         var q = cart[id];
         total += p.price * q;
+        count += q;
         var label = p.name + (A.lang === "ar" && p.name_alt ? " (" + p.name_alt + ")" : "");
-        lines.push(n++ + ". " + label + " × " + q + " = " + fmt(p.price * q));
+        var n = code.length;  // one entry per product
+        items.push((NUM[n] || (n + 1) + ".") + " *" + label + "*");
+        items.push("      " + q + " × " + fmt(p.price) + " = *" + fmt(p.price * q) + "*");
         code.push(id + "x" + q);
       });
-      if (n === 1) { draw(); return; }
-      lines.push("", "*" + t.wa_total + ": " + fmt(total) + "*");
-      if (d.name || d.phone || d.address || d.note) lines.push("");
-      if (d.name) lines.push(t.wa_name + ": " + d.name);
-      if (d.phone) lines.push(t.wa_phone + ": " + d.phone);
-      if (d.address) lines.push(t.wa_address + ": " + d.address);
-      if (d.note) lines.push(t.wa_note + ": " + d.note);
-      // one link to an order page: WhatsApp shows a single picture with ALL ordered products
-      lines.push("", t.wa_photo + ": " + String(A.siteUrl || location.origin).replace(/\/$/, "") + "/order/" + code.join("-"));
+      if (!items.length) { draw(); return; }
+      var site = String(A.siteUrl || location.origin).replace(/\/$/, "");
+      var orderUrl = site + "/order/" + code.join("-");
 
-      var url = "https://wa.me/" + String(A.whatsapp).replace(/\D/g, "") + "?text=" + encodeURIComponent(lines.join("\n"));
-      window.location.href = url;
+      var lines = ["🌸 *" + t.wa_title + "* 🌸", SEP,
+                   "🛍️ *" + t.wa_items + "* (" + count + ")", ""].concat(items);
+      lines.push(SEP, "💰 *" + t.wa_total + ": " + fmt(total) + "*", "🚚 " + t.perk_delivery);
+      if (d.name || d.phone || d.address || d.note) {
+        lines.push(SEP, "👤 *" + t.wa_customer + "*");
+        if (d.name) lines.push(t.wa_name + ": " + d.name);
+        if (d.phone) lines.push("📞 " + t.wa_phone + ": " + d.phone);
+        if (d.address) lines.push("📍 " + t.wa_address + ": " + d.address);
+        if (d.note) lines.push("📝 " + t.wa_note + ": " + d.note);
+      }
+      // one link to an order page: WhatsApp shows a single picture with ALL ordered products
+      lines.push(SEP, "📸 " + t.wa_photo + ":", orderUrl);
+
+      // api.whatsapp.com keeps emojis intact (the wa.me redirect can break them)
+      var url = "https://api.whatsapp.com/send?phone=" + String(A.whatsapp).replace(/\D/g, "") +
+                "&text=" + encodeURIComponent(lines.join("\n"));
+
+      // warm up the order page and its picture first, so WhatsApp's preview loads instantly
+      var btn = form.querySelector("[type=submit]");
+      if (btn) { btn.disabled = true; btn.classList.add("is-loading"); }
+      var warm = Promise.all([
+        fetch(orderUrl, { mode: "no-cors", cache: "no-store" }),
+        fetch(orderUrl + ".jpg", { mode: "no-cors", cache: "no-store" })
+      ]).catch(function () {});
+      var timeout = new Promise(function (res) { setTimeout(res, 2500); });
+      Promise.race([warm, timeout]).then(function () { window.location.href = url; });
     });
 
     fetch("/api/products", { credentials: "same-origin" })
